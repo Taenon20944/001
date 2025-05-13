@@ -106,7 +106,7 @@ if page == "📊 หน้าแสดงผล rate และ ชั่วโ�
     st.subheader("📊 กราฟรวม Avg Rate")
     fig_combined = go.Figure()
     fig_combined.add_trace(go.Scatter(x=brush_numbers, y=avg_rate_upper, mode='lines+markers+text', name='Upper Avg Rate', line=dict(color='red'), text=[str(i) for i in brush_numbers], textposition='top center'))
-    fig_combined.add_trace(go.Scatter(x=brush_numbers, y=avg_rate_lower, mode='lines+markers+text', name='Lower Avg Rate', line=dict(color='deepskyblue'), text=[str(i) for i in brush_numbers], textposition='top center'))
+    fig_combined.add_trace(go.Scatter(x=brush_numbers, y=avg_rate_lower, mode='lines+markers+text', name='Lower Avg Rate', line=dict(color='black'), text=[str(i) for i in brush_numbers], textposition='top center'))
     fig_combined.update_layout(xaxis_title='Brush Number', yaxis_title='Wear Rate (mm/hour)', template='plotly_white')
     st.plotly_chart(fig_combined, use_container_width=True)
 

@@ -97,9 +97,23 @@ if page == "📊 หน้าแสดงผล rate และ ชั่วโ�
                 lower_rates[n][f"Lower_{sheet}"] = rate if rate > 0 else 0
 
 
-    # 2. ฟังก์ชัน determine_final_rate คงเดิมได้เลย
-    min_required = 5
-    threshold = 0.05 # คูณด้วย 10 = ... %
+   # 🔧 ให้ผู้ใช้กรอกจำนวนรอบขั้นต่ำ และเปอร์เซ็นต์ threshold
+ # ใช้ text_input แทน number_input เพื่อไม่ให้มี +/-
+    min_required_str = st.text_input("🔢 จำนวนรอบขั้นต่ำที่ทำให้อัตราคงที่", value="5")
+    threshold_percent_str = st.text_input("📉 เปอร์เซ็นต์ที่ยอมให้ (%)", value="5.0")
+
+    # แปลง string เป็นตัวเลข (ระวัง error)
+    try:
+        min_required = int(min_required_str)
+    except:
+        min_required = 5  # fallback
+
+    try:
+        threshold_percent = float(threshold_percent_str)
+    except:
+        threshold_percent = 5.0
+
+    threshold = threshold_percent / 100  # แปลงเป็นค่าเชิงทศนิยม
 
     def determine_final_rate(previous_rates, new_rate, row_index, sheet_name, mark_dict, min_required, threshold):
         previous_rates = [r for r in previous_rates if pd.notna(r) and r > 0]
@@ -648,7 +662,11 @@ elif page == "📝 กรอกข้อมูลแปลงถ่านเพ�
 
     # ------------------ แสดงตารางรวม ------------------
     st.subheader("📄 ตารางรวม Upper + Lower (Current / Previous)")
-    xls = pd.ExcelFile("https://docs.google.com/spreadsheets/d/1PUi4SXo4b_Zu7LO9mm4-EaYpPBnILSG41Jxr7a0Yaaw/edit?usp=sharing")
+    
+    # เชื่อมต่อ Google Sheet
+    sheet_id = "1PUi4SXo4b_Zu7LO9mm4-EaYpPBnILSG41Jxr7a0Yaaw"
+    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
+    xls = pd.ExcelFile(sheet_url)
    
     # 📌 เลือกชีตที่ต้องการดู
     sheet_options = [ws.title for ws in sh.worksheets() if ws.title.lower().startswith("sheet")]
